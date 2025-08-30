@@ -1,4 +1,4 @@
-import { supplement, iterateDescriptors } from 'js-partial-classes';
+import { supplement, iterateDescriptors, SUPPLEMENTED_SYMBOLS } from '../index.js';
 
 // Test classes
 class MainClass {
@@ -36,6 +36,7 @@ async function testSupplement() {
   
   // Test after static initialization supplementation
   const mainAfter = new MainClass();
+  await MainClass[SUPPLEMENTED_SYMBOLS.SUPPLEMENTATION_COMPLETED];
   console.log('After static initialization supplementation:');
   console.log('- Main method:', mainAfter.mainMethod());
   console.log('- Static method:', MainClass.staticMethod());

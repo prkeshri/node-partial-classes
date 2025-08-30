@@ -6,7 +6,7 @@
   "repository": {
     "url": "https://github.com/prkeshri/node-partial-classes.git"
   },
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A utility package for supplementing main classes with methods from partial classes, supporting both static and instance methods.",
   "main": "index.js",
   "type": "module",
@@ -14,7 +14,11 @@
     ".": "./index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "ts-node-esm test/run-all-tests.js",
+    "test:basic": "node test/basic.test.js",
+    "test:supplement": "node test/supplement.test.js",
+    "test:supplementAll": "node test/supplementAll.test.js",
+    "test:iterateDescriptors": "node test/iterateDescriptors.test.js"
   },
   "keywords": [
     "partial-classes",
@@ -32,6 +36,11 @@
     "node": ">=14.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0"
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.2"
+  },
+  "dependencies": {
+    "i": "^0.3.7",
+    "ts-import": "^5.0.0-beta.1"
   }
 }

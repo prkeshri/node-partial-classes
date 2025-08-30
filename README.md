@@ -6,6 +6,7 @@ A utility package for supplementing main classes with methods from partial class
 
 - **Method Injection**: Copy all static and instance methods from a partial class to a main class
 - **Dynamic Import Support**: Support for both direct class references and dynamic imports via string paths
+- **TypeScript Support**: Full TypeScript support with type definitions and `.ts` file handling
 - **ES6 Module Compatible**: Built with modern JavaScript and ES6 modules
 - **Lightweight**: Minimal dependencies and footprint
 
@@ -59,6 +60,23 @@ class MainClass {
 }
 ```
 
+### Bulk Loading with TypeScript Support
+
+```typescript
+import { supplementAll, myDir } from 'js-partial-classes';
+
+class MainClass {
+  static {
+    // Load all .js and .ts files from a directory
+    // Note: supplementAll requires absolute paths
+    const partialClassesDir = myDir(import.meta.url) + '/partial-classes';
+    supplementAll(this, partialClassesDir);
+  }
+  
+  // ... main class implementation
+}
+```
+
 ## API Reference
 
 ### `supplement(mainClass, partialClass)`
@@ -76,6 +94,43 @@ Supplements a main class with methods from a partial class.
 - Copies all instance methods from `partialClass.prototype` to `mainClass.prototype`
 - Skips the constructor method
 - Supports both direct class references and dynamic imports
+
+### `supplementAll(mainClass, directory)`
+
+Supplements a main class with methods from all partial classes in a directory.
+
+**Parameters:**
+- `mainClass` (Class): The target class to be supplemented
+- `directory` (string): The absolute directory path to scan for partial class files
+
+**Returns:** Promise<Record<string, any>>
+
+**Behavior:**
+- Scans the specified directory for `.js`, `.ts`, `.mjs`, and `.cjs` files
+- Automatically supplements the main class with all found partial classes
+- Supports JavaScript, TypeScript, ES modules, and CommonJS files
+- **Important**: Requires absolute paths for proper module resolution
+
+### `myDir(url)`
+
+Utility function to get the directory path from a file URL. Essential for ES modules to obtain absolute paths.
+
+**Parameters:**
+- `url` (string): The import.meta.url or file URL
+
+**Returns:** string - The directory path
+
+**Example:**
+```javascript
+import { myDir } from 'js-partial-classes';
+
+// Get current directory in ES module
+const currentDir = myDir(import.meta.url);
+
+// Use with supplementAll
+const partialClassesDir = myDir(import.meta.url) + '/partial-classes';
+supplementAll(MainClass, partialClassesDir);
+```
 
 ### `iterateDescriptors(cls, callback)`
 
@@ -96,6 +151,73 @@ Utility function to iterate over class descriptors.
 4. **No Property Copying**: Only methods are copied; properties and other descriptors are not transferred.
 
 ## Examples
+
+### TypeScript Usage
+
+```typescript
+// partial-classes/validation.ts
+export default class ValidationPartial {
+  static validateEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+  
+  validateRequired(value: any): boolean {
+    return value !== null && value !== undefined && value !== '';
+  }
+}
+
+// partial-classes/utilities.ts
+export default class UtilitiesPartial {
+  static formatDate(date: Date): string {
+    return date.toISOString().split('T')[0];
+  }
+  
+  formatCurrency(amount: number): string {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(amount);
+  }
+}
+
+// main-class.ts
+import { supplementAll, myDir } from 'js-partial-classes';
+
+class UserService {
+  static {
+    // Load all partial classes from the directory (supports .js, .ts, .mjs, .cjs)
+    // Note: supplementAll requires absolute paths
+    const partialClassesDir = myDir(import.meta.url) + '/partial-classes';
+    supplementAll(this, partialClassesDir);
+  }
+  
+  constructor() {
+    this.users: any[] = [];
+  }
+  
+  addUser(user: any): void {
+    this.users.push(user);
+  }
+}
+
+// Usage
+const service = new UserService();
+
+// Static methods (TypeScript will show these as available)
+// @ts-ignore - TypeScript won't know about supplemented methods at compile time
+console.log(UserService.validateEmail('test@example.com')); // true
+// @ts-ignore
+console.log(UserService.formatDate(new Date())); // '2024-01-15'
+
+// Instance methods
+// @ts-ignore
+console.log(service.validateRequired('hello')); // true
+// @ts-ignore
+console.log(service.formatCurrency(1234.56)); // '$1,234.56'
+```
+
+### JavaScript Usage
 
 ### Validation Partial Class
 

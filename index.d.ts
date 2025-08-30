@@ -72,3 +72,55 @@ export function iterateDescriptors(
   cls: Function, 
   cb: (descriptor: [string, PropertyDescriptor]) => void
 ): void;
+
+/**
+ * Gets the directory path from a file URL.
+ * Essential for ES modules to obtain absolute paths for supplementAll.
+ * 
+ * @param url - The import.meta.url or file URL
+ * @returns The directory path
+ * 
+ * @example
+ * // Get current directory in ES module
+ * const currentDir = myDir(import.meta.url);
+ * 
+ * // Use with supplementAll
+ * const partialClassesDir = myDir(import.meta.url) + '/partial-classes';
+ * supplementAll(MainClass, partialClassesDir);
+ * 
+ * @since 1.0.0
+ */
+export function myDir(url: string): string;
+
+/**
+ * Supplements a main class with methods from all partial classes in a directory.
+ * 
+ * This function scans a directory for JavaScript and TypeScript files and supplements
+ * the main class with methods from each partial class found. It supports various
+ * file extensions including .js, .ts, .mjs, and .cjs.
+ * 
+ * @param mainClass - The target class to be supplemented with methods from partial classes
+ * @param directory - The directory path to scan for partial class files
+ * @returns Promise that resolves to an object containing the loaded modules
+ * 
+ * @example
+ * // Supplement with all partial classes in a directory
+ * class MainClass {
+ *   static {
+ *     supplementAll(this, './partial-classes');
+ *   }
+ * }
+ * 
+ * @example
+ * // Using with async/await
+ * async function setupClass() {
+ *   await supplementAll(MainClass, './partial-classes');
+ * }
+ * 
+ * @throws {Error} If the directory cannot be read or partial classes cannot be imported
+ * @since 1.0.0
+ */
+export function supplementAll(
+  mainClass: Function,
+  directory: string
+): Promise<Record<string, any>>;
