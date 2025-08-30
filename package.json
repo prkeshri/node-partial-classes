@@ -4,9 +4,9 @@
     "registry": "https://registry.npmjs.org/"
   },
   "repository": {
-    "url": "git:https://github.com/prkeshri/node-codebehind.git"
+    "url": "https://github.com/prkeshri/node-partial-classes.git"
   },
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A utility package for supplementing main classes with methods from partial classes, supporting both static and instance methods.",
   "main": "index.js",
   "type": "module",
