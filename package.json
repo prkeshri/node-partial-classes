@@ -1,0 +1,37 @@
+{
+  "name": "partial-classes",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "repository": {
+    "url": "git:https://github.com/prkeshri/node-codebehind.git"
+  },
+  "version": "1.0.0",
+  "description": "A utility package for supplementing main classes with methods from partial classes, supporting both static and instance methods.",
+  "main": "index.js",
+  "type": "module",
+  "exports": {
+    ".": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "partial-classes",
+    "class-composition",
+    "method-injection",
+    "static-methods",
+    "instance-methods",
+    "class-extension",
+    "javascript",
+    "es6-modules"
+  ],
+  "author": "Praveen Ranjan Keshri",
+  "license": "ISC",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0"
+  }
+}
