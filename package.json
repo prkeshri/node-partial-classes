@@ -6,7 +6,7 @@
   "repository": {
     "url": "git:https://github.com/prkeshri/node-codebehind.git"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A utility package for supplementing main classes with methods from partial classes, supporting both static and instance methods.",
   "main": "index.js",
   "type": "module",

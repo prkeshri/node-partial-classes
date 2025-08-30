@@ -45,10 +45,16 @@ export async function supplement(mainClass, partialClass) {
   partialClass = await partialClass;
   const PartialClass = partialClass.default || partialClass;
   iterateDescriptors(PartialClass.prototype, ([key, value]) => {
+    if (!value.writable) {
+      return;
+    }
     mainClass.prototype[key] = value.value;
   });
 
   iterateDescriptors(PartialClass, ([key, value]) => {
+    if (!value.writable) {
+      return;
+    }
     mainClass[key] = value.value;
   });
 }
