@@ -1,4 +1,4 @@
-import { supplement, iterateDescriptors } from './index.js';
+import { supplement, iterateDescriptors } from 'js-partial-classes';
 
 // Test classes
 class MainClass {

@@ -1,4 +1,4 @@
-import { supplement } from '../index.js';
+import { supplement } from 'js-partial-classes';
 
 // Main class with static initialization block
 class UserService {

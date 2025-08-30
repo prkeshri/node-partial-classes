@@ -1,4 +1,4 @@
-# partial-classes
+# js-partial-classes
 
 A utility package for supplementing main classes with methods from partial classes, supporting both static and instance methods.
 
@@ -12,13 +12,13 @@ A utility package for supplementing main classes with methods from partial class
 ## Installation
 
 ```bash
-npm install partial-classes
+npm install js-partial-classes
 ```
 
 ## Usage
 
 ```javascript
-import { supplement } from 'partial-classes';
+import { supplement } from 'js-partial-classes';
 
 class MainClass {
   static {
@@ -45,7 +45,7 @@ console.log(instance.instanceMethod()); // Available from partial class
 ### Multiple Partial Classes
 
 ```javascript
-import { supplement } from 'partial-classes';
+import { supplement } from 'js-partial-classes';
 
 class MainClass {
   static {
@@ -134,7 +134,7 @@ export default class UtilitiesPartial {
 ### Using Multiple Partials
 
 ```javascript
-import { supplement } from 'partial-classes';
+import { supplement } from 'js-partial-classes';
 
 class UserService {
   static {
