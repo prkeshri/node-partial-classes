@@ -122,3 +122,6 @@ export async function supplementAll(mainClass, directory) {
 }
 
 export { iterateDescriptors, SUPPLEMENTED_SYMBOLS, myDir };
+
+// Re-export types for TypeScript users
+export * from './types.js';

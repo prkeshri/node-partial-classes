@@ -92,6 +92,9 @@ export function iterateDescriptors(
  */
 export function myDir(url: string): string;
 
+// Re-export types for TypeScript users
+export * from './types';
+
 /**
  * Supplements a main class with methods from all partial classes in a directory.
  * 

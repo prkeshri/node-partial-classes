@@ -7,6 +7,7 @@ A utility package for supplementing main classes with methods from partial class
 - **Method Injection**: Copy all static and instance methods from a partial class to a main class
 - **Dynamic Import Support**: Support for both direct class references and dynamic imports via string paths
 - **TypeScript Support**: Full TypeScript support with type definitions and `.ts` file handling
+- **Advanced Type System**: Utility types for combining class types after supplementation
 - **ES6 Module Compatible**: Built with modern JavaScript and ES6 modules
 - **Lightweight**: Minimal dependencies and footprint
 
@@ -150,6 +151,88 @@ Utility function to iterate over class descriptors.
 
 4. **No Property Copying**: Only methods are copied; properties and other descriptors are not transferred.
 
+## TypeScript Types
+
+The library provides powerful utility types that help TypeScript understand the combined structure of classes after supplementation.
+
+### Basic Type Combination
+
+```typescript
+import { supplement, Combine } from 'js-partial-classes';
+
+class Home {
+  static {
+    supplement(this, HomePartial);
+  }
+  
+  homeMethod() { return 'home'; }
+}
+
+class HomePartial {
+  static staticMethod() { return 'static'; }
+  partialMethod() { return 'partial'; }
+}
+
+// Create a type that represents the combined class
+export type HomeFull = Combine<[typeof Home, typeof HomePartial]>;
+
+// HomeFull now includes all methods from both classes
+const home = new Home() as HomeFull;
+home.homeMethod();      // ✅ Available
+home.partialMethod();   // ✅ Available
+Home.staticMethod();    // ✅ Available
+```
+
+### Multiple Partial Classes
+
+```typescript
+import { supplement, Combine } from 'js-partial-classes';
+
+class UserService {
+  static {
+    supplement(this, ValidationPartial);
+    supplement(this, UtilitiesPartial);
+  }
+  
+  addUser(user: any) { this.users.push(user); }
+}
+
+class ValidationPartial {
+  static validateEmail(email: string): boolean { return true; }
+  validateRequired(value: any): boolean { return true; }
+}
+
+class UtilitiesPartial {
+  static formatDate(date: Date): string { return date.toISOString(); }
+  formatCurrency(amount: number): string { return `$${amount}`; }
+}
+
+// Combine all classes into one type
+export type UserServiceFull = Combine<[
+  typeof UserService, 
+  typeof ValidationPartial, 
+  typeof UtilitiesPartial
+]>;
+
+// UserServiceFull now has all methods from all classes
+const service = new UserService() as UserServiceFull;
+service.validateEmail('test@example.com');  // ✅ Available
+service.formatDate(new Date());             // ✅ Available
+service.formatCurrency(1234.56);           // ✅ Available
+```
+
+### Type Assertion with `as` Operator
+
+```typescript
+// Simply use the 'as' operator for type assertion
+const user = new UserService() as UserServiceFull;
+
+// Now TypeScript knows about all supplemented methods
+user.validateEmail('test@example.com');
+user.formatDate(new Date());
+user.addUser({ name: 'John' });
+```
+
 ## Examples
 
 ### TypeScript Usage
@@ -182,7 +265,7 @@ export default class UtilitiesPartial {
 }
 
 // main-class.ts
-import { supplementAll, myDir } from 'js-partial-classes';
+import { supplementAll, myDir, Combine } from 'js-partial-classes';
 
 class UserService {
   static {
@@ -201,20 +284,32 @@ class UserService {
   }
 }
 
-// Usage
-const service = new UserService();
+// Define the partial classes for type combination
+class ValidationPartial {
+  static validateEmail(email: string): boolean { return true; }
+  validateRequired(value: any): boolean { return true; }
+}
 
-// Static methods (TypeScript will show these as available)
-// @ts-ignore - TypeScript won't know about supplemented methods at compile time
-console.log(UserService.validateEmail('test@example.com')); // true
-// @ts-ignore
-console.log(UserService.formatDate(new Date())); // '2024-01-15'
+class UtilitiesPartial {
+  static formatDate(date: Date): string { return date.toISOString(); }
+  formatCurrency(amount: number): string { return `$${amount}`; }
+}
 
-// Instance methods
-// @ts-ignore
-console.log(service.validateRequired('hello')); // true
-// @ts-ignore
-console.log(service.formatCurrency(1234.56)); // '$1,234.56'
+// Create a combined type that includes all supplemented methods
+export type UserServiceFull = Combine<[
+  typeof UserService, 
+  typeof ValidationPartial, 
+  typeof UtilitiesPartial
+]>;
+
+// Usage with proper typing
+const service = new UserService() as UserServiceFull;
+
+// Now TypeScript knows about all supplemented methods!
+console.log(UserService.validateEmail('test@example.com')); // ✅ No @ts-ignore needed
+console.log(UserService.formatDate(new Date())); // ✅ No @ts-ignore needed
+console.log(service.validateRequired('hello')); // ✅ No @ts-ignore needed
+console.log(service.formatCurrency(1234.56)); // ✅ No @ts-ignore needed
 ```
 
 ### JavaScript Usage
